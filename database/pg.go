@@ -1,6 +1,7 @@
 package database
 
 import (
+	"anonichat/models"
 	"fmt"
 	"log"
 	"os"
@@ -42,6 +43,6 @@ func InitDB() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	db.AutoMigrate()
+	db.AutoMigrate(models.Message{}, models.User{})
 	fmt.Println("sukses terhubung dengan db")
 }
