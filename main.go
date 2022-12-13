@@ -1,6 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"anonichat/database"
+
+	"github.com/gin-gonic/gin"
+)
+
+func init() {
+	database.InitDB()
+}
 
 func main() {
 	r := gin.Default()
