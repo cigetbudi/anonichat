@@ -1,23 +1,16 @@
 package main
 
 import (
-	"anonichat/database"
-
-	"github.com/gin-gonic/gin"
+	"anonichat/api"
+	"anonichat/models"
 )
 
 func init() {
-	database.InitDB()
+	models.InitDB()
 }
 
 func main() {
-	r := gin.Default()
-
-	r.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(200, gin.H{
-			"message": "API JALAN",
-		})
-	})
+	r := api.InitRoutes()
 
 	r.Run(":4545")
 

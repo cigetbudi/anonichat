@@ -1,7 +1,6 @@
-package database
+package models
 
 import (
-	"anonichat/models"
 	"fmt"
 	"log"
 	"os"
@@ -11,7 +10,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var DB *gorm.DB
 var err error
 
 func getEnv(key string) string {
@@ -39,10 +38,11 @@ func InitDB() {
 		password,
 	)
 
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
+		return
 	}
-	db.AutoMigrate(models.Message{}, models.User{})
+	DB.AutoMigrate(Message{}, User{})
 	fmt.Println("sukses terhubung dengan db")
 }
