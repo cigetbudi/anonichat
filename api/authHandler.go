@@ -31,9 +31,22 @@ func Register(ctx *gin.Context) {
 }
 
 func Login(ctx *gin.Context) {
-	ctx.JSON(200, gin.H{
-		"message": "API Login",
-	})
+	vm := models.Login{}
+	if err := ctx.ShouldBind(&vm); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	u := models.User{}
+	u.Username = vm.Username
+	u.Password = vm.Password
+
+	token, err := models.LoginCheck(u.Username, u.Password)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "username atau password tidak sesuai"})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"token": token})
 
 }
 func Logout(ctx *gin.Context) {

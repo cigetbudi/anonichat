@@ -1,6 +1,7 @@
 package models
 
 import (
+	"anonichat/utils/token"
 	"html"
 	"strings"
 
@@ -34,14 +35,27 @@ func (u *User) SaveUser() (*User, error) {
 	return u, nil
 }
 
-// func (u *User) BeforeSave() error {
-// 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	u.Password = string(hashedPassword)
+func VerifyPassword(password, hashedPassword string) error {
+	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
 
-// 	u.Username = html.EscapeString(strings.TrimSpace(u.Username))
+func LoginCheck(username, password string) (string, error) {
+	var err error
+	u := User{}
+	err = DB.Model(User{}).Where("username = ?", username).Take(&u).Error
+	if err != nil {
+		return "", err
+	}
+	err = VerifyPassword(password, u.Password)
+	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
+		return "", err
+	}
 
-// 	return nil
-// }
+	token, err := token.GenerateToken(u.ID)
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
+}
