@@ -11,7 +11,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		err := token.TokenValid(ctx)
 		if err != nil {
-			ctx.String(http.StatusUnauthorized, "Unauthorized")
+			ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			ctx.Abort()
 			return
 		}

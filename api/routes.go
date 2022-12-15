@@ -18,5 +18,14 @@ func InitRoutes() *gin.Engine {
 	protected.Use(middlwares.JwtAuthMiddleware())
 	protected.GET("/user", CurrentLogin)
 
+	urArea := r.Group("/urArea")
+	urArea.Use(middlwares.JwtAuthMiddleware())
+	urArea.GET("/GetAllPosts", GetAllMessages)
+	urArea.GET("/GetAllPostsByUser", GetAllMessagesByUser)
+	urArea.POST("/CreatePost", CreateMessage)
+	urArea.POST("/LikePost/:id", LikePost)
+	urArea.POST("/UnlikePost/:id", UnlikePost)
+	urArea.DELETE("/DeletePost/:id", DeleteMessage)
+
 	return r
 }
