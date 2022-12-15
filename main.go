@@ -12,6 +12,6 @@ func init() {
 func main() {
 	r := api.InitRoutes()
 
-	r.Run(":4545")
+	r.Run()
 
 }

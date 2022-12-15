@@ -2,6 +2,7 @@ package models
 
 import (
 	"anonichat/utils/token"
+	"errors"
 	"html"
 	"strings"
 
@@ -15,6 +16,24 @@ type User struct {
 	Password string `json:"password" gorm:"password"`
 	Name     string `json:"name" gorm:"unique"`
 	Email    string `json:"email" gorm:"unique"`
+}
+
+func GetUserByID(uid uint) (User, error) {
+
+	var u User
+
+	if err := DB.First(&u, uid).Error; err != nil {
+		return u, errors.New("user tidak ditemukan")
+	}
+
+	u.PrepareGive()
+
+	return u, nil
+
+}
+
+func (u *User) PrepareGive() {
+	u.Password = ""
 }
 
 func (u *User) SaveUser() (*User, error) {

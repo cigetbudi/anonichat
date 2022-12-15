@@ -2,10 +2,28 @@ package api
 
 import (
 	"anonichat/models"
+	"anonichat/utils/token"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
+
+func CurrentLogin(ctx *gin.Context) {
+	user_id, err := token.ExtractTokenID(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	u, err := models.GetUserByID(user_id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "success", "data": u})
+
+}
 
 func Register(ctx *gin.Context) {
 	vm := models.Register{}
