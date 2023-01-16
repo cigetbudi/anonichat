@@ -12,7 +12,7 @@ func InitRoutes() *gin.Engine {
 
 	r.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, gin.H{
-			"message": "Welcome to AnoniCHAT OPENAPI",
+			"message": "Welcome to AnoniCHAT API",
 		})
 	})
 
